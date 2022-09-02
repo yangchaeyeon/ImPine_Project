@@ -141,13 +141,13 @@ st.set_page_config(
  )
 
 ## 로고 이미지 넣기
-st.image("./title.png", use_column_width=True)
+# st.image("./title.png", use_column_width=True)
 
 
 ## 사이드바
-data = pd.read_csv("pine.csv") # 전국 고사목 수
-data = data.set_index("년도") # 년도 데이터를 인덱스로 지정
-chart_data = pd.DataFrame(data)
+# data = pd.read_csv("pine.csv") # 전국 고사목 수
+# data = data.set_index("년도") # 년도 데이터를 인덱스로 지정
+# chart_data = pd.DataFrame(data)
 
 st.sidebar.header("소나무재선충병")
 name = st.sidebar.selectbox("Menu", ['개요', '면적 추출 예시', '면적 계산하기'])
@@ -155,7 +155,7 @@ name = st.sidebar.selectbox("Menu", ['개요', '면적 추출 예시', '면적 �
 # 1) 사이드바 1번 - 전국 고사목 수
 if name == "개요":
     st.write("### 🌳 소나무재선충병 피해 본수와 투입 예산")
-    st.image("./그림2.jpg", width=500)
+    # st.image("./그림2.jpg", width=500)
     st.write("""
     ### 🌳 소나무재선충병이란?
     - 매개충인 하늘소에 의해 빠른 확산이 이루어짐
@@ -178,18 +178,18 @@ if name =="면적 추출 예시":
     st.markdown("#### 🌳 소나무재선충병 이미지")
     st.write("- 산림 모형과 전처리 이미지")
  
-    col1, col2, col3, col4, col5 = st.columns(5)
-    col1.image("./train/001.jpg", width=200)
-    col2.image("./train/002.jpg", width=200)
-    col3.image("./train/003.jpg", width=200)
-    col4.image("./train/004.jpg", width=200)
-    col5.image("./train/005.jpg", width=200)    
+    # col1, col2, col3, col4, col5 = st.columns(5)
+    # col1.image("./train/001.jpg", width=200)
+    # col2.image("./train/002.jpg", width=200)
+    # col3.image("./train/003.jpg", width=200)
+    # col4.image("./train/004.jpg", width=200)
+    # col5.image("./train/005.jpg", width=200)    
   
-    col1.image("./target/target001.jpg", width=200)
-    col2.image("./target/target002.jpg", width=200)
-    col3.image("./target/target003.jpg", width=200)
-    col4.image("./target/target004.jpg", width=200)
-    col5.image("./target/target005.jpg", width=200)
+    # col1.image("./target/target001.jpg", width=200)
+    # col2.image("./target/target002.jpg", width=200)
+    # col3.image("./target/target003.jpg", width=200)
+    # col4.image("./target/target004.jpg", width=200)
+    # col5.image("./target/target005.jpg", width=200)
 
 # 3) 사이드바 3번 - 면적 계산하기    
 # 사진 업로드(여러장도 가능하게)        
@@ -206,7 +206,7 @@ if name =="면적 계산하기":
     # 저장된 사진에 대하여..
     # 1) 이미지 전처리
     HEIGHT, WIDTH, CHANNEL = 512, 512, 3
-    X_test = imagePrep('./temp_files/*.jpg', WIDTH, HEIGHT, CHANNEL)  
+    # X_test = imagePrep('./temp_files/*.jpg', WIDTH, HEIGHT, CHANNEL)  
     
     # 2) 원본과 전처리 후 보여주기 + 면적 출력
     model_path = './model/07-0.6855.hdf5'
