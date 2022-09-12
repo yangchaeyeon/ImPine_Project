@@ -9,10 +9,13 @@ from sklearn.model_selection import train_test_split
 
 import matplotlib.pyplot as plt
 import os
+import natsort
 import cv2
 import numpy as np
 import glob
 import tensorflow as tf
+import matplotlib.cm as cm
+
 
 # 모델
 def get_model(img_size, num_classes):
@@ -78,14 +81,15 @@ def imagePrep(path_pattern, WIDTH, HEIGHT, CHANNEL):
     
     filelist = glob.glob(path_pattern)
     fileabslist = [os.path.abspath(fpath) for fpath in filelist]
+    after_filelist = natsort.natsorted(fileabslist)
     X = []
-    for fname in fileabslist:
+    for fname in after_filelist:
         img = cv2.imread(fname).astype('float32') / 255
         #print(img.shape)
         img = cv2.resize(img, (WIDTH, HEIGHT))
         if CHANNEL == 1:
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            img = np.expand_dims(img, axis=2)
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            #img = np.expand_dims(img, axis=2)
         else:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         X.append(img)
@@ -97,7 +101,7 @@ def imagePrep(path_pattern, WIDTH, HEIGHT, CHANNEL):
 def imageVis(X, W, H ,C):
     fig, ax = plt.subplots(1, 10, figsize=(20, 4))
     for i, img in enumerate(X[:10]):
-        ax[i].imshow((img.reshape(W, H, C) *255).astype('uint8'))
+        ax[i].imshow((img.reshape(W, H, C)*255).astype('uint8'))
     plt.show()
     return fig
 
@@ -118,11 +122,32 @@ def test_model(path ,test_data):
     plt.show()
     return ae_imgs
     
-def display_mask(model , i):
+def display_mask_save(model , i):
     model = np.round(model)
-    x = np.array(model[i].reshape(512,512) *255).astype('uint8')
+    x = np.array(model[i].reshape(512,512,3) *255).astype('uint8')
     img = Image.fromarray(x)
-    img.show()
+    #img.show()
+    #이미지 저장.
+    img.save(f"testtarget/{i}.jpg")
+    #plt.imshow(img)
+    return model
+
+def display_mask_test(model , i , test_data):
+    X_test_rgb = imagePrep('data/test/*', 512, 512, 1)
+    model = np.round(model)
+    x = np.array(model[i].reshape(512,512,3) *255).astype('uint8')
+    img = Image.fromarray(x)
+    #img.show()
+    #이미지 저장.
+    #img.save(f"./testtarget/{i}.jpg")
+    plt.figure(figsize=(60, 10))
+    ax = plt.subplot(1, 6, 1) 
+    plt.imshow((X_test_rgb[i]*255).astype('uint8'))
+    ax.axis('off')
+    
+    ax = plt.subplot(1, 6, 2) 
+    plt.imshow(img)
+    ax.axis('off')
     return model
 
 # 오토인코딩 결과를 히스토그램으로 표시 
@@ -158,4 +183,4 @@ def calArea(IMG):
     ds_S = ds_area*rate_w # 질병 면적
     st_S = ds_area*rate_b # 정상 면적
     
-    return ds_S
+    return ds_S, st_S
